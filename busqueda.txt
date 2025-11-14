@@ -1,0 +1,9 @@
+=== RESULTADOS DE BÚSQUEDA ===
+Rango de fechas: 927213601 a 1001130359
+
+1. Sep 27 21:36:31 R:El Mar O:Pad Thai(259) 
+2. Sep 27 23:0:37 R:Los Rincones O:Tacos de Barbacoa(250) 
+3. Oct 1 13:1:41 R:El Sazon Mexicano O:ensalada Caprese(139) 
+4. Oct 1 13:3:32 R:Delicias del Valle O:enchiladas Verdes(273) 
+
+Total de registros encontrados: 4
