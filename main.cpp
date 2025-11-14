@@ -156,3 +156,9 @@ int main() {
 
     return 0;
 }
+
+/*
+comandos para termianrl ejecutar
+g++ main.cpp -o main
+./main
+*/
