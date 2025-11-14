@@ -1,13 +1,7 @@
 /*
 Descripción del programa:
-1.⁠ ⁠Abra el archivo de entrada llamado "orders.txt", lo lea y almacene los datos en arreglos. Es valido crear objetos.
-2.⁠ ⁠Ordena la información por fecha para la realización de las búsquedas. 
-3.⁠ ⁠Despliega los primeros 10 registros en pantalla y almacena en un archivo salida.txt el resultado del ordenamiento completo. 
-4.⁠ ⁠Solicita al usuario las fechas de inicio y fin de búsqueda de información. 
-5.⁠ ⁠Despliega los registros correspondientes a esas fechas. Toma en cuenta que si no hay coincidencias exactas para inicio y fin de todas formas debes devolver registros dentro del rango. 
-6.⁠ ⁠Despliegue en pantalla el resultado de las búsquedas, y da al usuario la opción de guardarlo en un archivo. 
-7. Agregue todos los menús y almacénelos en una estructura tipo BST  dónde la llave será el número de platillor y el valor es el platillo.
-8. Encuentre los pedidos con más solicitud.
+1. Agregue todos los menús y almacénelos en una estructura tipo BST  dónde la llave será el número de platillor y el valor es el platillo.
+2. Encuentre los pedidos con más solicitud.
 
 Autores: Equipo SProblema 5
  - Franco Varela Villegas - A01199186
@@ -18,62 +12,64 @@ Fecha de modificación: 13/11/2025
 */
 
 #include <iostream>
+using namespace std;
 #include <fstream>
 #include <cstring>
-using namespace std;
+#include "Orden.h"
+#include <string>
 
 #define MAX_ORDENES 10000
 #define MAX_NOMBRE 256
 #define MAX_PLATILLOS 5000  // máximo de platillos distintos
 
 // Nodo del árbol binario de búsqueda
-struct NodoArbol {
+struct NodeT {
     int frecuencia;
     char ordenes[10][MAX_NOMBRE]; // agrupa platillos con la misma frecuencia (máx. 10)
     int numOrdenes;
-    NodoArbol *izq, *der;
+    NodeT *left, *right;
 
-    NodoArbol(int f, const char* nombre) {
+    NodeT(int f, const char* nombre) {
         frecuencia = f;
         strcpy(ordenes[0], nombre);
         numOrdenes = 1;
-        izq = der = nullptr;
+        left = right = nullptr;
     }
 };
 
 // Inserta en el árbol según frecuencia
-NodoArbol* insertar(NodoArbol* raiz, int frecuencia, const char* nombre) {
-    if (raiz == nullptr)
-        return new NodoArbol(frecuencia, nombre);
+NodeT* insertar(NodeT* root, int frecuencia, const char* nombre) {
+    if (root == nullptr)
+        return new NodeT(frecuencia, nombre);
 
-    if (frecuencia < raiz->frecuencia)
-        raiz->izq = insertar(raiz->izq, frecuencia, nombre);
-    else if (frecuencia > raiz->frecuencia)
-        raiz->der = insertar(raiz->der, frecuencia, nombre);
+    if (frecuencia < root->frecuencia)
+        root->left = insertar(root->left, frecuencia, nombre);
+    else if (frecuencia > root->frecuencia)
+        root->right = insertar(root->right, frecuencia, nombre);
     else {
         // Misma frecuencia → agregar al mismo nodo
-        if (raiz->numOrdenes < 10) {
-            strcpy(raiz->ordenes[raiz->numOrdenes], nombre);
-            raiz->numOrdenes++;
+        if (root->numOrdenes < 10) {
+            strcpy(root->ordenes[root->numOrdenes], nombre);
+            root->numOrdenes++;
         }
     }
-    return raiz;
+    return root;
 }
 
 // Recorrido descendente (de mayor a menor frecuencia)
-void imprimirDescendente(NodoArbol* raiz) {
-    if (raiz == nullptr) return;
+void imprimirDescendente(NodeT* root) {
+    if (root == nullptr) return;
 
-    imprimirDescendente(raiz->der);
+    imprimirDescendente(root->right);
 
-    cout << raiz->frecuencia << " veces: ";
-    for (int i = 0; i < raiz->numOrdenes; i++) {
-        cout << raiz->ordenes[i];
-        if (i < raiz->numOrdenes - 1) cout << ", ";
+    cout << root->frecuencia << " veces: ";
+    for (int i = 0; i < root->numOrdenes; i++) {
+        cout << root->ordenes[i];
+        if (i < root->numOrdenes - 1) cout << ", ";
     }
     cout << endl;
 
-    imprimirDescendente(raiz->izq);
+    imprimirDescendente(root->left);
 }
 
 // Extrae el nombre del platillo del texto completo
@@ -149,14 +145,14 @@ int main() {
     cout << "Platillos únicos encontrados: " << numPlatos << endl;
 
     // Crear el árbol binario por frecuencia
-    NodoArbol* raiz = nullptr;
+    NodeT* root = nullptr;
     for (int i = 0; i < numPlatos; i++) {
-        raiz = insertar(raiz, conteos[i], nombres[i]);
+        root = insertar(root, conteos[i], nombres[i]);
     }
 
     // Mostrar el árbol descendente
     cout << "\n=== ÁRBOL DE FRECUENCIAS (de más pedidas a menos) ===\n";
-    imprimirDescendente(raiz);
+    imprimirDescendente(root);
 
     return 0;
 }

@@ -236,3 +236,7 @@ void guardarBusqueda(Orden ordenes[], int total, unsigned long int fechaInicio, 
         std::cout << "Error al crear el archivo de búsqueda" << std::endl;
     }
 }
+
+// comadnos para termianrl ejecutar
+// g++ act1.3_integral.cpp -o act1.3_integral
+// ./act1.3_integral
